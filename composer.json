@@ -1,0 +1,24 @@
+{
+    "name": "lekoala/silverstripe-starter-theme",
+    "description": "A starter theme for SilverStripe",
+    "type": "silverstripe-theme",
+    "keywords": [
+        "silverstripe",
+        "theme"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LeKoala",
+            "email": "thomas@lekoala.be"
+        }
+    ],
+    "extra": {
+        "expose": [
+            "css",
+            "images",
+            "javascript",
+            "fonts"
+        ]
+    }
+}
