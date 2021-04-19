@@ -46,6 +46,8 @@ Fonts needs to be preloaded for best results, see StarterPageExtension::PreloadR
 By default, the search form works on all pages. But this leads to a lot of problems.
 In general, I'd rather use a custom search controller to display results. This should be provided with $SearchControllerLink.
 
+You can use https://github.com/lekoala/silverstripe-simple-search to enable this.
+
 # Misc
 
 - SiteConfig.ThemeColor to be defined
