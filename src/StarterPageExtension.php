@@ -27,7 +27,8 @@ class StarterPageExtension extends DataExtension
             $fonts = glob($fontFolder . '/*.woff2');
             foreach ($fonts as $font) {
                 $font = basename($font);
-                $html .= "<link rel=\"preload\" href=\"$dir/fonts/$font\" as=\"font\" type=\"font/woff2\">\n";
+                // browsers will ignore preloaded fonts without the crossorigin attribute, which will cause the browser to actually fetch the font twice
+                $html .= "<link rel=\"preload\" href=\"$dir/fonts/$font\" as=\"font\" type=\"font/woff2\" crossOrigin=\"anonymous\" >\n";
             }
         }
 

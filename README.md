@@ -48,10 +48,30 @@ In general, I'd rather use a custom search controller to display results. This s
 
 You can use https://github.com/lekoala/silverstripe-simple-search to enable this.
 
+# Javascript
+
+No js is required by default in the theme. This is because I highly recommend to manage things from your controller instead.
+
+Here is a sample bit of code you can include in `PageController::init`.
+
+```php
+//This is not needed, because we use js modules
+//Requirements::themedJavascript("javascript/vendor/bootstrap/src/toast.js");
+Requirements::themedJavascript("javascript/script.js");
+$script = <<<JS
+import Modal from "/_resources/themes/starter/javascript/vendor/bootstrap/src/modal.js"
+
+var myModal = new Modal(document.getElementById('DemoModal'));
+myModal.show();
+JS;
+Requirements::customScript($script);
+```
+
+Please note we are using js modules here and this require the usage of my defer backend module with `enable_js_modules` set to `true`
+for this to work.
+
+NOTE: Dropdown, Tooltip and Popover are not [usable with js modules](https://getbootstrap.com/docs/5.0/getting-started/javascript/#using-bootstrap-as-a-module)
+
 # Misc
 
 - SiteConfig.ThemeColor to be defined
-
-# Todo
-
-- Find a way to support js modules properly with requirements backend

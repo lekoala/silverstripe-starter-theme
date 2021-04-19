@@ -8,12 +8,6 @@
 	<title><% if $MetaTitle %>$MetaTitle<% else %>$Title<% end_if %> | $SiteConfig.Title</title>
 
 	$MetaTags(false)
-
-    <script type="module">
-        document.documentElement.classList.remove('no-js');
-        document.documentElement.classList.add('js');
-    </script>
-
     $PreloadResources
 
 	<% require themedCSS('all.min.css') %>
@@ -38,8 +32,7 @@
     $Layout
 </div>
 <% include Footer %>
-
-<% require themedJavascript('script', 'module') %>
-
+<% include ToastMessages %>
+<% include Modal %>
 </body>
 </html>
