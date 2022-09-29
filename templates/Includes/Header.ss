@@ -16,6 +16,5 @@
         <input type="search" name="q" class="form-control" placeholder="Search..." spellcheck="false">
     </form>
     <% end_if %>
-
   </div>
 </header>

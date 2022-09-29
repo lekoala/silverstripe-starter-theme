@@ -6,6 +6,10 @@
         "silverstripe",
         "theme"
     ],
+    "require": {
+        "lekoala/silverstripe-defer-backend": "^1.2",
+        "lekoala/silverstripe-themes-helper": "*"
+    },
     "license": "MIT",
     "authors": [
         {

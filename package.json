@@ -1,0 +1,24 @@
+{
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^5.2.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "postcss-cli": "^10.0.0",
+    "sass": "^1.54.9",
+    "esbuild": "^0.15.7"
+  },
+  "scripts": {
+    "build-js": "esbuild --bundle --minify --target=es6 --format=esm javascript/script.js --outfile=javascript/all.min.js",
+    "watch-js": "npm run build-js -- --watch",
+    "compile-css": "sass ./scss/all.scss:./css/all.css && sass --style compressed ./scss/all.scss:./css/all.min.css",
+    "print-css": "sass ./scss/print.scss:./css/print.css && sass --style compressed ./scss/print.scss:./css/print.min.css",
+    "watch-css": "npm run compile-css -- --watch --poll",
+    "prefix-css": "postcss ./css/all.min.css --replace --use autoprefixer && postcss ./css/all.css --replace --use autoprefixer",
+    "build-css": "npm run compile-css && npm run print-css && npm run prefix-css",
+    "build-all": "npm run build-js && npm run build-css"
+  }
+}

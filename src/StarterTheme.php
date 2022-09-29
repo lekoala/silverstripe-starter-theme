@@ -2,21 +2,30 @@
 
 use SilverStripe\i18n\i18n;
 use SilverStripe\Core\Convert;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Control\Director;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\Control\Controller;
 use SilverStripe\ErrorPage\ErrorPage;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\SiteConfig\SiteConfig;
 
-class StarterPageExtension extends DataExtension
+/**
+ * In your PageController, include this
+ * require_once BASE_PATH . '/themes/starter/src/StarterTheme.php';
+ *
+ * Or copy paste in your app/src folder
+ */
+trait StarterTheme
 {
-    private static $casting = [
-        'PreloadResources' => 'HTMLFragment',
-    ];
+    public function Year()
+    {
+        return date('Y');
+    }
 
     public function PreloadResources()
     {
-        $dir = $this->owner->ThemeDir();
+        /** @var Controller $this */
+        $dir = $this->ThemeDir();
         $themeFolder = Director::publicFolder() . $dir;
         $fontFolder = $themeFolder . '/fonts';
 
@@ -32,9 +41,12 @@ class StarterPageExtension extends DataExtension
             }
         }
 
-        $this->owner->extend('updatePreloadResources', $html);
+        // Add your own ressources if needed ?
+        $this->extend('updatePreloadResources', $html);
 
-        return $html;
+        $htmlText = new DBHTMLText(__FUNCTION__);
+        $htmlText->setValue($html);
+        return $htmlText;
     }
 
     protected function createMetaTag($property, $content)
@@ -45,12 +57,32 @@ class StarterPageExtension extends DataExtension
 
     public function getShareDescription()
     {
+        /** @var Controller $this */
+        /** @var DataObject|Page $data */
+        $data = $this->data();
         // The page provides its own meta description
-        if ($this->owner->MetaDescription) {
-            return $this->owner->MetaDescription;
+        if ($data->MetaDescription) {
+            return $data->MetaDescription;
         }
         // Or fetch summary from content
-        return preg_replace('/\s+/', ' ', $this->owner->dbObject('Content')->Summary());
+        return preg_replace('/\s+/', ' ', $data->dbObject('Content')->Summary() ?? '');
+    }
+
+    /**
+     * @link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta/name/theme-color
+     * @link https://css-tricks.com/meta-theme-color-and-trickery/
+     * @return string
+     */
+    public function MetaThemeColor()
+    {
+        // Controlled by SiteConfig if any
+        if (class_exists(SiteConfig::class)) {
+            $sc = SiteConfig::current_site_config();
+            if ($sc->ThemeColor) {
+                return $sc->ThemeColor;
+            }
+        }
+        return false;
     }
 
     /**
@@ -59,22 +91,23 @@ class StarterPageExtension extends DataExtension
      * @param string $tags
      * @return void
      */
-    public function MetaTags(&$tags)
+    public function AugmentedMetaTags($includeTitle = true)
     {
-        $owner = $this->getOwner();
+        /** @var Controller $this */
+        /** @var DataObject|Page $owner */
+        $owner = $this->data();
         $className = $owner->ClassName;
         $ignoredClasses = [ErrorPage::class];
         if (in_array($className, $ignoredClasses)) {
             return;
         }
 
-        $controller = Controller::curr();
         $sourceObject = $owner;
 
-        // Source object can be a DataObject
+        // Source object can be a DataObject (eg: view)
         try {
-            if ($controller->hasMethod("getRequestedRecord")) {
-                $sourceObject = $controller->getRequestedRecord();
+            if ($this->hasMethod("getRequestedRecord")) {
+                $sourceObject = $this->getRequestedRecord();
                 if (!$sourceObject) {
                     $sourceObject = $owner;
                 }
@@ -87,15 +120,15 @@ class StarterPageExtension extends DataExtension
         $SiteConfig = SiteConfig::current_site_config();
         $descriptionText = '';
         if ($sourceObject->hasField('MetaDescription')) {
-            $descriptionText = trim($sourceObject->MetaDescription);
+            $descriptionText = trim($sourceObject->MetaDescription ?? "");
         }
         if (!$descriptionText && $sourceObject->hasMethod('getShareDescription')) {
             $descriptionText = $sourceObject->getShareDescription();
         }
         if (!$descriptionText && $sourceObject->hasField('Content')) {
-            $descriptionText = preg_replace('/\s+/', ' ', $sourceObject->dbObject('Content')->Summary());
+            $descriptionText = preg_replace('/\s+/', ' ', $sourceObject->dbObject('Content')->Summary() ?? "");
         }
-        $descriptionText = trim($descriptionText);
+        $descriptionText = trim($descriptionText ?? "");
 
         // image
         $imageLink = '';
@@ -129,6 +162,7 @@ class StarterPageExtension extends DataExtension
         }
 
         // OpenGraph
+        // @link https://ogp.me/
         $tags .= "\n<!-- OpenGraph Meta Tags -->\n";
         // og:type
         $siteTitle = $SiteConfig->Title;
@@ -178,5 +212,9 @@ class StarterPageExtension extends DataExtension
             $cardType = 'summary_large_image';
         }
         $tags .= $this->createMetaTag('twitter:card', $cardType);
+
+        $htmlText = new DBHTMLText(__FUNCTION__);
+        $htmlText->setValue($tags);
+        return $htmlText;
     }
 }

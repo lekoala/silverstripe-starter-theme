@@ -1,52 +1,73 @@
 # Using the Starter theme
 
-* Copy the theme into the `themes/` directory of your SilverStripe project.  If you've named it correctly, there should be a directory called `themes/[your-theme]/templates`.
-* Add the following to your `app/config/theme.yml` file.
+-   Copy the theme into the `themes/` directory of your SilverStripe project. If you've named it correctly, there should be a directory called `themes/[your-theme]/templates`.
+-   Add the following to your `app/config/theme.yml` file.
 
- ```yml
- SilverStripe\View\SSViewer:
-  themes:
-    - '$public'
-    - '[your-theme]'
-    - '$default'
+```yml
+SilverStripe\View\SSViewer:
+    themes:
+        - "$public"
+        - "[your-theme]"
+        - "$default"
 ```
 
-* Update composer.json to fit your new theme name.
-* Copy src/StarterPageExtension.php to app/src and make your page uses it
+-   Update composer.json to fit your new theme name.
+-   Run `composer vendor-expose` if needed
+-   Happy hacking!
 
- ```yml
-SilverStripe\CMS\Model\SiteTree:
-  extensions:
-    - StarterPageExtension
+_This theme is not meant to be used by itself ! It is only a starting point for your own developments._
+
+## Themes helper
+
+Some features have been made available as a convenience as a trait unde `src/StarterTheme.php`.
+
+```php
+
+<?php
+
+require_once BASE_PATH . '/themes/starter/src/StarterTheme.php';
+
+use SilverStripe\View\Requirements;
+use LeKoala\DeferBackend\DeferBackend;
+use SilverStripe\CMS\Controllers\ContentController;
+
+class PageController extends ContentController
+{
+    use StarterTheme;
+    ...
 ```
-
-* Happy hacking!
 
 # Features
 
 This theme is basically build around recommendations made in this article https://www.matuzo.at/blog/html-boilerplate/ which is a brilliant introduction for
 a modern boilerplate.
 
-It is bundled with bootstrap 5 but feel free to use whatever you like.
+It is bundled with bootstrap 5 but feel free to use whatever you like. The scss files are compiled with dart sass and prefixed with autoprefixer.
 
 # Favicon
 
-Favicon needs to be set in /images folder. Use https://realfavicongenerator.net/ to create your icon. Please use a svg icon.
-Provided icon has been made with https://www.blobmaker.app/.
+Favicon needs to be set in /images folder. Use an icon generator:
+
+-   [https://realfavicongenerator.net/](https://realfavicongenerator.net/)
+-   [https://formito.com/tools/favicon](https://formito.com/tools/favicon)
+
+Please use a svg icon if possible!
+
+Provided icon has been made with [https://www.blobmaker.app/](https://www.blobmaker.app/).
 
 # Fonts
 
-Please use https://google-webfonts-helper.herokuapp.com/fonts/ to create a local version of your google fonts or use your own.
-Use only woff/woff2 fonts.
+Please use [fonts helper](https://google-webfonts-helper.herokuapp.com/fonts/) to create a local version of your google fonts or use your own.
+Use only woff2 fonts for modern browsers.
 
-Fonts needs to be preloaded for best results, see StarterPageExtension::PreloadResources
+Fonts needs to be preloaded for best results, see how to preload fonts in StarterTheme trait.
 
 # Search form
 
 By default, the search form works on all pages. But this leads to a lot of problems.
 In general, I'd rather use a custom search controller to display results. This should be provided with $SearchControllerLink.
 
-You can use https://github.com/lekoala/silverstripe-simple-search to enable this.
+You can use [simple search](https://github.com/lekoala/silverstripe-simple-search) to enable this.
 
 # Javascript
 
@@ -55,23 +76,15 @@ No js is required by default in the theme. This is because I highly recommend to
 Here is a sample bit of code you can include in `PageController::init`.
 
 ```php
-//This is not needed, because we use js modules
-//Requirements::themedJavascript("javascript/vendor/bootstrap/src/toast.js");
-Requirements::themedJavascript("javascript/script.js");
-$script = <<<JS
-import Modal from "/_resources/themes/starter/javascript/vendor/bootstrap/src/modal.js"
-
-var myModal = new Modal(document.getElementById('DemoModal'));
-myModal.show();
-JS;
-Requirements::customScript($script);
+protected function init()
+{
+    parent::init();
+    DeferBackend::replaceBackend();
+    Requirements::themedJavascript("javascript/all.min.js", ['type' => 'module']);
+}
 ```
 
-Please note we are using js modules here and this require the usage of my defer backend module with `enable_js_modules` set to `true`
-for this to work.
+Js is using modern standard and is compiled using esbuild.
 
-NOTE: Dropdown, Tooltip and Popover are not [usable with js modules](https://getbootstrap.com/docs/5.0/getting-started/javascript/#using-bootstrap-as-a-module)
-
-# Misc
-
-- SiteConfig.ThemeColor to be defined
+Please note we are using js modules here as it allows using modern js safely and defer js loading by default.
+You need to use my module [defer backend](https://github.com/lekoala/silverstripe-defer-backend) module with `enable_js_modules` set to `true` for this to work.

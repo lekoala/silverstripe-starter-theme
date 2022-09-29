@@ -14,7 +14,7 @@
 
 		<div class="row footer-copyright">
         <hr/>
-        <small class="text-muted">© 2021 - $SiteConfig.Title</small>
+        <small class="text-muted">© $Year - $SiteConfig.Title</small>
         <small class="text-muted">Theme by <a href="https://www.lekoala.be" class="text-light">LeKoala</a> / Powered by <a href="http://silverstripe.org" class="text-light">SilverStripe</a></small>
         </div>
 	</div>

@@ -7,7 +7,7 @@
 	<% base_tag %>
 	<title><% if $MetaTitle %>$MetaTitle<% else %>$Title<% end_if %> | $SiteConfig.Title</title>
 
-	$MetaTags(false)
+	$AugmentedMetaTags(false)
     $PreloadResources
 
 	<% require themedCSS('all.min.css') %>
@@ -17,20 +17,24 @@
     <link rel="canonical" href="$CanonicalLink">
     <% end_if %>
 
-    <link rel="icon" href="$ThemeDir/images/favicon.ico">
-    <link rel="icon" href="$ThemeDir/images/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="$ThemeDir/images/apple-touch-icon.png">
-    <link rel="manifest" href="$ThemeDir/images/site.webmanifest">
-    <% if SiteConfig.ThemeColor %>
-    <meta name="theme-color" content="$SiteConfig.ThemeColor">
+    <link rel="icon" href="$ThemeDir/images/icons/favicon.ico">
+    <link rel="icon" href="$ThemeDir/images/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="$ThemeDir/images/icons/apple-touch-icon.png">
+    <link rel="manifest" href="$ThemeDir/images/icons/site.webmanifest">
+    <% if $MetaThemeColor %>
+    <meta name="theme-color" content="$MetaThemeColor">
+    <%--
+    <meta name="theme-color" content="#f8f9fa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#212529" media="(prefers-color-scheme: dark)">
+    --%>
     <% end_if %>
 
 </head>
 <body class="$ClassName.ShortName<% if not $Menu(2) %> no-sidebar<% end_if %>" <% if $i18nScriptDirection %>dir="$i18nScriptDirection"<% end_if %>>
 <% include Header %>
-<div class="main typography" role="main">
+<section class="main typography" role="main">
     $Layout
-</div>
+</section>
 <% include Footer %>
 <% include ToastMessages %>
 <% include Modal %>
