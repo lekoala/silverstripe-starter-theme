@@ -29,21 +29,25 @@ trait StarterTheme
         $themeFolder = Director::publicFolder() . $dir;
         $fontFolder = $themeFolder . '/fonts';
 
-        $html = '';
+        $resources = [];
+        // Add your own ressources if needed ?
+        $this->extend('updatePreloadResources', $resources);
 
         // Preload fonts
         if (is_dir($fontFolder)) {
             $fonts = glob($fontFolder . '/*.woff2');
             foreach ($fonts as $font) {
                 $font = basename($font);
-                // browsers will ignore preloaded fonts without the crossorigin attribute, which will cause the browser to actually fetch the font twice
-                $html .= "<link rel=\"preload\" href=\"$dir/fonts/$font\" as=\"font\" type=\"font/woff2\" crossOrigin=\"anonymous\" >\n";
+                $resources[] = "$dir/fonts/$font";
             }
         }
 
-        // Add your own ressources if needed ?
-        $this->extend('updatePreloadResources', $html);
-
+        $html = '';
+        foreach ($resources as $r) {
+            // browsers will ignore preloaded fonts without the crossorigin attribute,
+            // which will cause the browser to actually fetch the font twice
+            $html .= "<link rel=\"preload\" href=\"$r\" as=\"font\" type=\"font/woff2\" crossOrigin=\"anonymous\" >\n";
+        }
         $htmlText = new DBHTMLText(__FUNCTION__);
         $htmlText->setValue($html);
         return $htmlText;
