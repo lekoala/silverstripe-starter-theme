@@ -1,12 +1,13 @@
-<nav class="py-2 bg-light border-bottom">
+<nav class="navbar navbar-expand-lg text-bg-light">
   <div class="container d-flex flex-wrap">
     <% include Navigation %>
   </div>
 </nav>
-<header class="py-3 mb-4 border-bottom">
+<header class="py-5 mb-4 border-bottom">
   <div class="container d-flex flex-wrap justify-content-center">
-    <a href="$BaseHref" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <p class="display-6 mb-0 mx-2">$SiteConfig.Title</h1>
+    <a href="$BaseHref" class="d-flex align-items-center mb-3 text-dark text-decoration-none">
+        <%-- h1 is reserved for the page title --%>
+        <p class="display-3 mb-0 mx-2">$SiteConfig.Title</p>
         <% if $SiteConfig.Tagline %>
 		<p class="">$SiteConfig.Tagline</p>
 		<% end_if %>

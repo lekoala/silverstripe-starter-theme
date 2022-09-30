@@ -1,0 +1,45 @@
+// @link https://getbootstrap.com/docs/5.2/utilities/api/#using-the-api
+
+$utilities: map-merge(
+    $utilities,
+    (
+        // Remove some utilities
+        "align": null,
+        "float": null,
+        "opacity": null,
+        "overflow": null,
+        "border-color": null,
+        "border-width": null,
+        "border-opacity": null,
+        "width": null,
+        "max-width": null,
+        "viewport-width": null,
+        "min-viewport-width": null,
+        "height": null,
+        "max-height": null,
+        "viewport-height": null,
+        "min-viewport-height": null,
+        "word-wrap": null,
+        "gradient": null,
+
+        // Remove the `background-color` utility. Use text-bg helper
+        "background-color": null,
+
+        // Make responsive
+        // "display":
+        //     map-merge(
+        //         map-get($utilities, "values"),
+        //         (
+        //             responsive: true,
+        //         )
+        //     ),
+        // Add new utilities
+        // "cursor":
+        //     (
+        //         property: cursor,
+        //         class: cursor,
+        //         responsive: true,
+        //         values: auto pointer grab,
+        //     )
+    )
+);

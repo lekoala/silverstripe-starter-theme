@@ -32,9 +32,9 @@
 </head>
 <body class="$ClassName.ShortName<% if not $Menu(2) %> no-sidebar<% end_if %>" <% if $i18nScriptDirection %>dir="$i18nScriptDirection"<% end_if %>>
 <% include Header %>
-<section class="main typography" role="main">
+<div class="main typography" role="main">
     $Layout
-</section>
+</div>
 <% include Footer %>
 <% include ToastMessages %>
 <% include Modal %>

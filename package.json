@@ -6,10 +6,10 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.8",
+    "esbuild": "^0.15.7",
     "postcss": "^8.4.16",
     "postcss-cli": "^10.0.0",
-    "sass": "^1.54.9",
-    "esbuild": "^0.15.7"
+    "sass": "^1.54.9"
   },
   "scripts": {
     "build-js": "esbuild --bundle --minify --target=es6 --format=esm javascript/script.js --outfile=javascript/all.min.js",

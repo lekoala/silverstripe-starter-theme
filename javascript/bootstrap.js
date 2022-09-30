@@ -12,7 +12,7 @@ import Toast from "bootstrap/js/src/toast.js";
 import Tooltip from "bootstrap/js/src/tooltip.js";
 
 // Only import what you really need!
-
+// Don't forget to disable relevant scss imports as well
 const Bootstrap = {
     //   Alert,
     Button,
