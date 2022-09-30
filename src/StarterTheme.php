@@ -46,7 +46,7 @@ trait StarterTheme
         foreach ($resources as $r) {
             // browsers will ignore preloaded fonts without the crossorigin attribute,
             // which will cause the browser to actually fetch the font twice
-            $html .= "<link rel=\"preload\" href=\"$r\" as=\"font\" type=\"font/woff2\" crossOrigin=\"anonymous\" >\n";
+            $html .= "<link rel=\"preload\" href=\"$r\" as=\"font\" type=\"font/woff2\" crossorigin=\"anonymous\">\n";
         }
         $htmlText = new DBHTMLText(__FUNCTION__);
         $htmlText->setValue($html);
@@ -56,7 +56,9 @@ trait StarterTheme
     protected function createMetaTag($property, $content)
     {
         $content = Convert::raw2att($content);
-        return "<meta property=\"{$property}\" content=\"{$content}\" />\n";
+        // Self-closing tag syntax in text/html documents is widely discouraged
+        // it’s unnecessary and interacts badly with other HTML features (e.g., unquoted attribute values).
+        return "<meta property=\"{$property}\" content=\"{$content}\">\n";
     }
 
     public function getShareDescription()
